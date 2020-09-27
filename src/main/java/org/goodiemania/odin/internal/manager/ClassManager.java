@@ -3,15 +3,15 @@ package org.goodiemania.odin.internal.manager;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import org.goodiemania.odin.external.annotations.Entity;
-import org.goodiemania.odin.internal.database.Database;
+import org.goodiemania.odin.internal.database.DatabaseWrapper;
 import org.reflections.Reflections;
 
 public class ClassManager {
     private ClassInfoBuilder classInfoBuilder;
-    private Database database;
+    private DatabaseWrapper databaseWrapper;
 
-    public ClassManager(final Database database, final ClassInfoBuilder classInfoBuilder) {
-        this.database = database;
+    public ClassManager(final DatabaseWrapper databaseWrapper, final ClassInfoBuilder classInfoBuilder) {
+        this.databaseWrapper = databaseWrapper;
         this.classInfoBuilder = classInfoBuilder;
     }
 
@@ -25,10 +25,10 @@ public class ClassManager {
     }
 
     private <T> void buildDatabase(final ClassInfo<T> classInfo) {
-        database.createEntityTable(classInfo);
+        databaseWrapper.createEntityTable(classInfo);
 
         if (!classInfo.getIndexedFields().isEmpty()) {
-            database.createEntitySearchFieldTable(classInfo);
+            databaseWrapper.createEntitySearchFieldTable(classInfo);
         }
     }
 }

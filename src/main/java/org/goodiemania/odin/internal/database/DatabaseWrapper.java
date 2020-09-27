@@ -6,7 +6,7 @@ import org.goodiemania.odin.external.model.SearchTerm;
 import org.goodiemania.odin.internal.manager.ClassInfo;
 
 //TODO this is a bad name
-public interface Database {
+public interface DatabaseWrapper {
     void createEntityTable(final ClassInfo<?> classInfo);
 
     void createEntitySearchFieldTable(final ClassInfo<?> classInfo);

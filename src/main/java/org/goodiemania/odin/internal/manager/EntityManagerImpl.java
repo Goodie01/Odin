@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import org.goodiemania.odin.external.EntityManager;
 import org.goodiemania.odin.external.exceptions.EntityParseException;
 import org.goodiemania.odin.external.model.SearchTerm;
-import org.goodiemania.odin.internal.database.Database;
+import org.goodiemania.odin.internal.database.DatabaseWrapper;
 import org.goodiemania.odin.internal.database.SearchField;
 import org.goodiemania.odin.internal.manager.search.SearchFieldGenerator;
 
@@ -21,16 +21,16 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
     private final ObjectWriter objectWriter;
     private final ObjectReader objectReader;
     private final ClassInfo<T> classInfo;
-    private final Database database;
+    private final DatabaseWrapper databaseWrapper;
     private final SearchFieldGenerator searchFieldGenerator;
 
     public EntityManagerImpl(
-            final Database database,
+            final DatabaseWrapper databaseWrapper,
             final ObjectMapper objectMapper,
             final SearchFieldGenerator searchFieldGenerator,
             final ClassInfo<T> classInfo) {
         this.classInfo = classInfo;
-        this.database = database;
+        this.databaseWrapper = databaseWrapper;
         this.searchFieldGenerator = searchFieldGenerator;
         this.objectReader = objectMapper.readerFor(classInfo.getRawClass());
         this.objectWriter = objectMapper.writerFor(classInfo.getRawClass());
@@ -43,7 +43,7 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
             String blob = objectWriter.writeValueAsString(object);
             List<SearchField> searchFields = searchFieldGenerator.generate(object);
 
-            database.saveEntity(classInfo, id, searchFields, blob);
+            databaseWrapper.saveEntity(classInfo, id, searchFields, blob);
         } catch (JsonProcessingException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalStateException(e);
         }
@@ -59,7 +59,7 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
                     .collect(Collectors.toList());
             searchFields.addAll(searchFieldGenerator.generate(object));
 
-            database.saveEntity(classInfo, id, searchFields, blob);
+            databaseWrapper.saveEntity(classInfo, id, searchFields, blob);
         } catch (JsonProcessingException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalStateException(e);
         }
@@ -67,18 +67,18 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
 
     @Override
     public Optional<T> getById(final String id) {
-        return database.getById(classInfo, id)
+        return databaseWrapper.getById(classInfo, id)
                 .map(this::convertJsonStringToObject);
     }
 
     @Override
     public void deleteById(final String id) {
-        database.deleteById(classInfo, id);
+        databaseWrapper.deleteById(classInfo, id);
     }
 
     @Override
     public List<T> search(final List<SearchTerm> searchTerms) {
-        return database.search(classInfo, searchTerms)
+        return databaseWrapper.search(classInfo, searchTerms)
                 .stream()
                 .map(this::convertJsonStringToObject)
                 .collect(Collectors.toList());
@@ -86,7 +86,7 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
 
     @Override
     public List<T> getAll() {
-        return database.getAll(classInfo)
+        return databaseWrapper.getAll(classInfo)
                 .stream()
                 .map(this::convertJsonStringToObject)
                 .collect(Collectors.toList());

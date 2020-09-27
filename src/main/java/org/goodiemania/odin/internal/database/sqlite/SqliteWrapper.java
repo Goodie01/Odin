@@ -3,20 +3,19 @@ package org.goodiemania.odin.internal.database.sqlite;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.goodiemania.odin.external.model.SearchTerm;
-import org.goodiemania.odin.internal.database.Database;
+import org.goodiemania.odin.internal.database.DatabaseWrapper;
 import org.goodiemania.odin.internal.database.SearchField;
 import org.goodiemania.odin.internal.manager.ClassInfo;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.statement.Query;
 
-public class SqliteWrapper implements Database {
+public class SqliteWrapper implements DatabaseWrapper {
     private final Jdbi jdbi;
 
     public SqliteWrapper(String jdbcConnectUrl) {

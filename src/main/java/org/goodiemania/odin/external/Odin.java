@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.goodiemania.odin.internal.OdinImpl;
-import org.goodiemania.odin.internal.database.Database;
+import org.goodiemania.odin.internal.database.DatabaseWrapper;
 import org.goodiemania.odin.internal.database.sqlite.SqliteWrapper;
 import org.goodiemania.odin.internal.manager.ClassInfo;
 import org.goodiemania.odin.internal.manager.ClassInfoBuilder;
@@ -58,7 +58,7 @@ public interface Odin {
 
         public Odin build() {
             Objects.requireNonNull(jdbcConnectUrl, "JDBC connection URL must be set");
-            final Database database = new SqliteWrapper(jdbcConnectUrl);
+            final DatabaseWrapper databaseWrapper = new SqliteWrapper(jdbcConnectUrl);
 
             if (packageNames.isEmpty()) {
                 throw new IllegalStateException("You must provide at least one package name");
@@ -68,14 +68,14 @@ public interface Odin {
                 objectMapper = new ObjectMapper();
             }
 
-            final ClassManager classManager = new ClassManager(database, new ClassInfoBuilder());
+            final ClassManager classManager = new ClassManager(databaseWrapper, new ClassInfoBuilder());
             Set<ClassInfo<?>> classInfoSet = packageNames.stream()
                     .flatMap(classManager::find)
                     .collect(Collectors.toSet());
             ClassInfoHolder classInfoHolder = new ClassInfoHolder(classInfoSet);
             SearchFieldGenerator searchFieldGenerator = new SearchFieldGenerator(classInfoHolder);
 
-            return new OdinImpl(objectMapper, classInfoHolder, database, searchFieldGenerator);
+            return new OdinImpl(objectMapper, classInfoHolder, databaseWrapper, searchFieldGenerator);
         }
     }
 }

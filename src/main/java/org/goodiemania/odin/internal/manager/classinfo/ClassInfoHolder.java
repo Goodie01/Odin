@@ -12,14 +12,12 @@ public class ClassInfoHolder {
     }
 
     public <T> Optional<ClassInfo<T>> find(final Class<T> entityClass) {
-        ClassInfo<T> foundClassInfo = null;
         for (ClassInfo<?> potentialClassInfo : classInformation) {
             if (potentialClassInfo.getRawClass().isAssignableFrom(entityClass)) {
-                foundClassInfo = (ClassInfo<T>) potentialClassInfo;
-                break;
+                return Optional.of((ClassInfo<T>) potentialClassInfo);
             }
         }
 
-        return Optional.ofNullable(foundClassInfo);
+        return Optional.empty();
     }
 }

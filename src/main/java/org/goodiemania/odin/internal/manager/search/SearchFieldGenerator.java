@@ -32,7 +32,6 @@ public class SearchFieldGenerator {
                         } else if (fieldObject instanceof Collection) {
                             return generateListField((Collection<?>) fieldObject, propertyDescriptor, classInfo);
                         } else {
-                            ;
                             return generateBasicField(fieldObject, propertyDescriptor, classInfo);
                         }
                     } catch (IllegalAccessException | InvocationTargetException e) {
@@ -48,7 +47,7 @@ public class SearchFieldGenerator {
             final ClassInfo<?> classInfo) {
         String fieldName = classInfo.getTableName() + "_" + propertyDescriptor.getName();
         String fieldValue = object.toString();
-        return Stream.of(createSingleSearchField(fieldName, fieldValue));
+        return Stream.of(new SearchField(fieldName, fieldValue));
     }
 
     private Stream<SearchField> generateListField(
@@ -61,7 +60,7 @@ public class SearchFieldGenerator {
                 .map(o -> {
                     final String fieldValue = o.toString();
 
-                    return createSingleSearchField(fieldName, fieldValue);
+                    return new SearchField(fieldName, fieldValue);
                 });
     }
 
@@ -73,16 +72,11 @@ public class SearchFieldGenerator {
 
         return map.entrySet()
                 .stream()
-                .flatMap(entry -> {
+                .map(entry -> {
                     final String mapFieldName = String.format("%s_%s_%s", classInfo.getTableName(), fieldName, entry.getKey().toString());
                     final String mapFieldValue = entry.getValue().toString();
 
-                    return Stream.of(
-                            createSingleSearchField(mapFieldName, mapFieldValue));
+                    return new SearchField(mapFieldName, mapFieldValue);
                 });
-    }
-
-    private SearchField createSingleSearchField(final String fieldName, final String value) {
-        return new SearchField(fieldName, value);
     }
 }
