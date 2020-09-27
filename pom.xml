@@ -4,18 +4,29 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.radiancegames</groupId>
+    <groupId>org.goodiemania</groupId>
     <artifactId>odin</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <project.scm.id>github</project.scm.id>
         <jackson.version>2.10.1</jackson.version>
-        <version.thorntail>2.6.0.Final</version.thorntail>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <scm>
+        <developerConnection>scm:git:https://github.com/Goodie01/Odin.git</developerConnection>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub</name>
+            <url>https://maven.pkg.github.com/Goodie01/Odin</url>
+        </repository>
+    </distributionManagement>
 
     <build>
         <finalName>odin</finalName>
@@ -98,6 +109,20 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.9</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.5.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.5.2</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
