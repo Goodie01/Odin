@@ -4,7 +4,7 @@
 
     <groupId>org.goodiemania</groupId>
     <artifactId>odin</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <properties>
         <project.scm.id>github</project.scm.id>
