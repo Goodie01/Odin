@@ -4,7 +4,7 @@
 
     <groupId>org.goodiemania</groupId>
     <artifactId>odin</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
 
     <properties>
         <project.scm.id>github</project.scm.id>
@@ -20,7 +20,7 @@
 
     <scm>
         <developerConnection>scm:git:https://github.com/Goodie01/Odin.git</developerConnection>
-      <tag>odin-1.0.3</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <distributionManagement>
