@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.goodiemania.odin.internal.database.SearchField;
-import org.goodiemania.odin.internal.manager.ClassInfo;
+import org.goodiemania.odin.internal.manager.classinfo.ClassInfo;
 import org.goodiemania.odin.internal.manager.classinfo.ClassInfoHolder;
 
 public class SearchFieldGenerator {

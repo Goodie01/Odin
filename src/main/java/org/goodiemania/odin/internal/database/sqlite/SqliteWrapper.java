@@ -10,16 +10,18 @@ import java.util.stream.Collectors;
 import org.goodiemania.odin.external.model.SearchTerm;
 import org.goodiemania.odin.internal.database.DatabaseWrapper;
 import org.goodiemania.odin.internal.database.SearchField;
-import org.goodiemania.odin.internal.manager.ClassInfo;
+import org.goodiemania.odin.internal.manager.classinfo.ClassInfo;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.statement.Query;
 
 public class SqliteWrapper implements DatabaseWrapper {
     private final Jdbi jdbi;
+    private final SearchQueryBuilder searchQueryBuilder;
 
     public SqliteWrapper(String jdbcConnectUrl) {
         this.jdbi = Jdbi.create(jdbcConnectUrl);
+        searchQueryBuilder = new SearchQueryBuilder();
     }
 
     @Override
@@ -63,20 +65,19 @@ public class SqliteWrapper implements DatabaseWrapper {
             final List<SearchField> searchFields,
             final String blob) {
         jdbi.useTransaction(handle -> {
-            handle.execute(
-                    String.format(
-                            "insert or replace into %s (id, jsonBlob) values (?, ?)",
-                            classInfo.getTableName()),
-                    id, blob);
+            String deleteFromTableQuery = String.format("delete from %s where id = ?", classInfo.getTableName());
+            handle.execute(deleteFromTableQuery, id);
+            String queryString = String.format("insert into %s (id, jsonBlob) values (?, ?)", classInfo.getTableName());
+            handle.execute(queryString, id, blob);
 
             if (!classInfo.getIndexedFields().isEmpty()) {
                 deleteSearchTableEntries(classInfo, id, handle);
 
-                searchFields.forEach(field -> handle.execute(
-                        String.format(
-                                "insert into %s (objectId, fieldName, fieldValue) values (?, ?, ?)",
-                                classInfo.getSearchTableName()),
-                        id, field.getFieldName(), field.getFieldValue()));
+                searchFields.forEach(field -> {
+                    String searchTableQueryString =
+                            String.format("insert into %s (objectId, fieldName, fieldValue) values (?, ?, ?)", classInfo.getSearchTableName());
+                    handle.execute(searchTableQueryString, id, field.getFieldName(), field.getFieldValue());
+                });
             }
         });
     }
@@ -116,24 +117,10 @@ public class SqliteWrapper implements DatabaseWrapper {
     @Override
     public List<String> search(final ClassInfo<?> classInfo, final List<SearchTerm> searchTerms) {
         List<String> searchResults = jdbi.withHandle(handle -> {
-            StringBuilder queryString = new StringBuilder("select objectId from ").append(classInfo.getSearchTableName()).append(" where ");
-            for (int i = 0; i < searchTerms.size(); i++) {
-                if (i != 0) {
-                    queryString.append(" or ");
-                }
+            Query query = handle.createQuery(searchQueryBuilder.build(classInfo, searchTerms));
+            bindQueryValues(searchTerms, query);
 
-                queryString.append("(fieldName like :fieldName").append(i).append(" and fieldValue like :value").append(i).append(")");
-            }
-
-            Query query = handle.createQuery(queryString.toString());
-
-            for (int i = 0; i < searchTerms.size(); i++) {
-                query.bind("fieldName" + i, searchTerms.get(i).getFieldName());
-                query.bind("value" + i, searchTerms.get(i).getFieldValue());
-            }
-
-            return query.mapTo(String.class)
-                    .list();
+            return query.mapTo(String.class).list();
         });
 
         Set<Map.Entry<String, Long>> searchResultsCollated = searchResults.stream()
@@ -144,6 +131,13 @@ public class SqliteWrapper implements DatabaseWrapper {
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .flatMap(entry -> getById(classInfo, entry.getKey()).stream())
                 .collect(Collectors.toList());
+    }
+
+    private void bindQueryValues(final List<SearchTerm> searchTerms, final Query query) {
+        for (int i = 0; i < searchTerms.size(); i++) {
+            query.bind("fieldName" + i, searchTerms.get(i).getFieldName());
+            query.bind("value" + i, searchTerms.get(i).getFieldValue());
+        }
     }
 
     @Override

@@ -15,6 +15,7 @@ import org.goodiemania.odin.external.exceptions.EntityParseException;
 import org.goodiemania.odin.external.model.SearchTerm;
 import org.goodiemania.odin.internal.database.DatabaseWrapper;
 import org.goodiemania.odin.internal.database.SearchField;
+import org.goodiemania.odin.internal.manager.classinfo.ClassInfo;
 import org.goodiemania.odin.internal.manager.search.SearchFieldGenerator;
 
 public class EntityManagerImpl<T> implements EntityManager<T> {

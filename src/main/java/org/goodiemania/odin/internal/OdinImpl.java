@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.goodiemania.odin.external.EntityManager;
 import org.goodiemania.odin.external.Odin;
 import org.goodiemania.odin.internal.database.DatabaseWrapper;
-import org.goodiemania.odin.internal.manager.ClassInfo;
 import org.goodiemania.odin.internal.manager.EntityManagerImpl;
+import org.goodiemania.odin.internal.manager.classinfo.ClassInfo;
 import org.goodiemania.odin.internal.manager.classinfo.ClassInfoHolder;
 import org.goodiemania.odin.internal.manager.search.SearchFieldGenerator;
 

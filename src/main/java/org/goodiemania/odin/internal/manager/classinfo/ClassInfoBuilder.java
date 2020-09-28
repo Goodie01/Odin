@@ -1,4 +1,4 @@
-package org.goodiemania.odin.internal.manager;
+package org.goodiemania.odin.internal.manager.classinfo;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -18,7 +18,7 @@ public class ClassInfoBuilder {
     public <T> ClassInfo<T> build(final Class<T> rawClass) {
 
         String tableName = rawClass.getSimpleName();
-        String searchTableName = "__" + tableName + "_SearchField";
+        String searchTableName = tableName + "___SearchTable";
         PropertyDescriptor idField;
         List<PropertyDescriptor> indexedFields;
 

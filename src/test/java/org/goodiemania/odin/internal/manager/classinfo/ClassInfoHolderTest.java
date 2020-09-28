@@ -4,8 +4,6 @@ import java.util.Optional;
 import java.util.Set;
 import org.goodiemania.odin.example.ExampleEntity;
 import org.goodiemania.odin.example.NotPartOfHolderEntity;
-import org.goodiemania.odin.internal.manager.ClassInfo;
-import org.goodiemania.odin.internal.manager.ClassInfoBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

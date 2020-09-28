@@ -1,4 +1,4 @@
-package org.goodiemania.odin.internal.manager;
+package org.goodiemania.odin.internal.manager.classinfo;
 
 import java.beans.PropertyDescriptor;
 import java.util.List;
