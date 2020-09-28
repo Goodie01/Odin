@@ -20,13 +20,13 @@ class ClassInfoHolderTest {
     }
 
     @Test
-    public void happyFlow() {
+    void happyFlow() {
         final Optional<ClassInfo<ExampleEntity>> exampleEntityClassInfo = classInfoHolder.find(ExampleEntity.class);
         Assertions.assertTrue(exampleEntityClassInfo.isPresent());
     }
 
     @Test
-    public void ClassIsNotPartOfHolder() {
+    void ClassIsNotPartOfHolder() {
         final Optional<ClassInfo<NotPartOfHolderEntity>> exampleEntityClassInfo = classInfoHolder.find(NotPartOfHolderEntity.class);
         Assertions.assertTrue(exampleEntityClassInfo.isEmpty());
     }
