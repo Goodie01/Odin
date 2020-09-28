@@ -2,7 +2,6 @@ package org.goodiemania.odin.internal.database.mock;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +9,7 @@ import java.util.Optional;
 import org.goodiemania.odin.external.model.SearchTerm;
 import org.goodiemania.odin.internal.database.DatabaseWrapper;
 import org.goodiemania.odin.internal.database.SearchField;
-import org.goodiemania.odin.internal.manager.ClassInfo;
+import org.goodiemania.odin.internal.manager.classinfo.ClassInfo;
 
 public class MockDatabaseWrapperWrapper implements DatabaseWrapper {
     //entity type, ID, blob

@@ -4,6 +4,8 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import org.goodiemania.odin.external.annotations.Entity;
 import org.goodiemania.odin.internal.database.DatabaseWrapper;
+import org.goodiemania.odin.internal.manager.classinfo.ClassInfo;
+import org.goodiemania.odin.internal.manager.classinfo.ClassInfoBuilder;
 import org.reflections.Reflections;
 
 public class ClassManager {

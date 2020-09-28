@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 import org.goodiemania.odin.internal.OdinImpl;
 import org.goodiemania.odin.internal.database.DatabaseWrapper;
 import org.goodiemania.odin.internal.database.sqlite.SqliteWrapper;
-import org.goodiemania.odin.internal.manager.ClassInfo;
-import org.goodiemania.odin.internal.manager.ClassInfoBuilder;
 import org.goodiemania.odin.internal.manager.ClassManager;
+import org.goodiemania.odin.internal.manager.classinfo.ClassInfo;
+import org.goodiemania.odin.internal.manager.classinfo.ClassInfoBuilder;
 import org.goodiemania.odin.internal.manager.classinfo.ClassInfoHolder;
 import org.goodiemania.odin.internal.manager.search.SearchFieldGenerator;
 
