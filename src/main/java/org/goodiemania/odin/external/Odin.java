@@ -24,7 +24,7 @@ import org.goodiemania.odin.internal.manager.search.SearchFieldGenerator;
 public interface Odin {
     <T> EntityManager<T> createFor(Class<T> entityClass);
 
-    static OdinImpl.OdinBuilder create() {
+    static Odin.OdinBuilder create() {
         return new OdinImpl.OdinBuilder();
     }
 
