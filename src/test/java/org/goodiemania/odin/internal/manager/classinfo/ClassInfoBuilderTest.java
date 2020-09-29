@@ -8,19 +8,19 @@ class ClassInfoBuilderTest {
     private final ClassInfoBuilder classInfoBuilder = new ClassInfoBuilder();
 
     @Test
-    public void testTableName() {
+    void testTableName() {
         ClassInfo<ExampleEntity> classInfo = classInfoBuilder.build(ExampleEntity.class);
         Assertions.assertEquals("ExampleEntity", classInfo.getTableName());
     }
 
     @Test
-    public void testSearchTableName() {
+    void testSearchTableName() {
         ClassInfo<ExampleEntity> classInfo = classInfoBuilder.build(ExampleEntity.class);
         Assertions.assertEquals("ExampleEntity___SearchTable", classInfo.getSearchTableName());
     }
 
     @Test
-    public void testIndexSearchField() {
+    void testIndexSearchField() {
         ClassInfo<ExampleEntity> classInfo = classInfoBuilder.build(ExampleEntity.class);
         Assertions.assertEquals("id", classInfo.getIdField().getName());
     }

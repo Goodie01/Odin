@@ -16,8 +16,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ExampleTest {
-
+public class DataStorageTests {
     private static final String EXAMPLE_ENTITY_NAME = "Example Entity";
     private static final String EXAMPLE_ENTITY_DESCRIPTION = "This is a description so YAY";
     private static final String EXAMPLE_ENTITY_NEW_DESCRIPTION = "This is a new Example description!";
@@ -26,7 +25,7 @@ public class ExampleTest {
     private EntityManager<ExampleEntity> em;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         Odin odin = Odin.create()
                 .addPackageName("org.goodiemania.odin.example")
                 .setJdbcConnectUrl("jdbc:sqlite:mainDatabase")
@@ -35,13 +34,13 @@ public class ExampleTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         final File databaseFile = new File("mainDatabase");
         assertTrue(databaseFile.delete());
     }
 
     @Test
-    public void saveAndRestoreObject() {
+    void saveAndRestoreObject() {
         String id = UUID.randomUUID().toString();
 
         ExampleEntity exampleEntity = createExampleEntity(id);
@@ -59,7 +58,7 @@ public class ExampleTest {
     }
 
     @Test
-    public void updateExistingObject() {
+    void updateExistingObject() {
         String id = UUID.randomUUID().toString();
 
         em.save(createExampleEntity(id));
@@ -78,7 +77,7 @@ public class ExampleTest {
     }
 
     @Test
-    public void searchForItemInDatabase() {
+    void searchForItemInDatabase() {
         final ExampleEntity exampleEntity = createExampleEntity(UUID.randomUUID().toString());
         em.save(exampleEntity);
 
@@ -88,7 +87,7 @@ public class ExampleTest {
     }
 
     @Test
-    public void searchForItemNotInDatabase() {
+    void searchForItemNotInDatabase() {
         final ExampleEntity exampleEntity = createExampleEntity(UUID.randomUUID().toString());
         em.save(exampleEntity);
 

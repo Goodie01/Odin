@@ -13,7 +13,7 @@ class SearchQueryBuilderTest {
     private final ClassInfo<ExampleEntity> classInfo = new ClassInfoBuilder().build(ExampleEntity.class);
 
     @Test
-    public void happyFlow() {
+    void happyFlow() {
         String searchQuery = builder.build(classInfo, List.of(SearchTerm.of("field", "value")));
         Assertions.assertEquals(
                 searchQuery,

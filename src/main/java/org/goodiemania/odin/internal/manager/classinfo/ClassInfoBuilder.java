@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.goodiemania.odin.external.annotations.Id;
 import org.goodiemania.odin.external.annotations.Index;
 import org.goodiemania.odin.external.exceptions.EntityException;
+import org.goodiemania.odin.external.exceptions.ShouldNeverHappenException;
 
 
 public class ClassInfoBuilder {
@@ -33,7 +34,7 @@ public class ClassInfoBuilder {
                 indexedFields = findFields(beanInfo, rawClass, Index.class);
             }
         } catch (IntrospectionException e) {
-            throw new IllegalStateException(e);
+            throw new ShouldNeverHappenException(e);
         }
 
         return new ClassInfo<>(rawClass, tableName, searchTableName, idField, indexedFields);
@@ -43,16 +44,16 @@ public class ClassInfoBuilder {
     private static PropertyDescriptor findIdAnnotatedField(
             final Class<?> classInformation,
             final BeanInfo beanInfo) {
-        List<PropertyDescriptor> annotatedFields = findFields(beanInfo, classInformation, Id.class);
+        List<PropertyDescriptor> foundIdFields = findFields(beanInfo, classInformation, Id.class);
 
-        if (annotatedFields.size() != 1) {
+        if (foundIdFields.size() != 1) {
             throw new EntityException(
                     String.format(
                             "Require exactly one, and only one, field annotated with @Id, on class: %s",
                             classInformation.getCanonicalName()));
         }
 
-        return annotatedFields.get(0);
+        return foundIdFields.get(0);
     }
 
     private static List<PropertyDescriptor> findFields(final BeanInfo beanInfo) {
@@ -73,7 +74,7 @@ public class ClassInfoBuilder {
                         return classInformation.getDeclaredField(propertyDescriptor.getName())
                                 .isAnnotationPresent(annotationClass);
                     } catch (NoSuchFieldException e) {
-                        throw new IllegalStateException(e);
+                        throw new ShouldNeverHappenException(e);
                     }
                 })
                 .collect(Collectors.toList());

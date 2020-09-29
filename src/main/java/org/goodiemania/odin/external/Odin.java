@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.goodiemania.odin.external.exceptions.InvalidArgumentsException;
 import org.goodiemania.odin.internal.OdinImpl;
 import org.goodiemania.odin.internal.database.DatabaseWrapper;
 import org.goodiemania.odin.internal.database.sqlite.SqliteWrapper;
@@ -57,17 +58,19 @@ public interface Odin {
         }
 
         public Odin build() {
-            Objects.requireNonNull(jdbcConnectUrl, "JDBC connection URL must be set");
-            final DatabaseWrapper databaseWrapper = new SqliteWrapper(jdbcConnectUrl);
+            if(jdbcConnectUrl == null) {
+                throw new InvalidArgumentsException("JDBC connection URL must be set");
+            }
 
             if (packageNames.isEmpty()) {
-                throw new IllegalStateException("You must provide at least one package name");
+                throw new InvalidArgumentsException("You must provide at least one package name");
             }
 
             if (objectMapper == null) {
                 objectMapper = new ObjectMapper();
             }
 
+            final DatabaseWrapper databaseWrapper = new SqliteWrapper(jdbcConnectUrl);
             final ClassManager classManager = new ClassManager(databaseWrapper, new ClassInfoBuilder());
             Set<ClassInfo<?>> classInfoSet = packageNames.stream()
                     .flatMap(classManager::find)
