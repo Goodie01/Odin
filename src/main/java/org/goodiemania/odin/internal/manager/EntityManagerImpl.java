@@ -55,24 +55,6 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
     }
 
     @Override
-    public void saveWithAdditionalSearchParams(final T object, final Object... additionalObjects) {
-        try {
-            String id = String.valueOf(classInfo.getIdField().getReadMethod().invoke(object));
-            String blob = objectWriter.writeValueAsString(object);
-            List<SearchField> searchFields = Arrays.stream(additionalObjects)
-                    .flatMap(o -> searchFieldGenerator.generate(o).stream())
-                    .collect(Collectors.toList());
-            searchFields.addAll(searchFieldGenerator.generate(object));
-
-            databaseWrapper.saveEntity(classInfo, id, searchFields, blob);
-        } catch (JsonProcessingException e) {
-            throw new EntityWritingException(e);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new ShouldNeverHappenException(e);
-        }
-    }
-
-    @Override
     public Optional<T> getById(final String id) {
         return databaseWrapper.getById(classInfo, id)
                 .map(this::convertJsonStringToObject);

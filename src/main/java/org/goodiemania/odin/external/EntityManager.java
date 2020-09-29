@@ -13,7 +13,5 @@ public interface EntityManager<T> {
 
     void save(T object);
 
-    void saveWithAdditionalSearchParams(T object, Object... additionalObjects);
-
     void deleteById(String id);
 }
