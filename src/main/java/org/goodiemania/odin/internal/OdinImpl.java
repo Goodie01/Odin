@@ -32,6 +32,6 @@ public class OdinImpl implements Odin {
         ClassInfo<T> classInfo = entityClasses.retrieve(entityClass)
                 .orElseThrow(() -> new UnknownClassException(entityClass, "Unable to find given class in any packages"));
 
-        return new EntityManagerImpl<T>(databaseWrapper, objectMapper, searchFieldGenerator, classInfo);
+        return new EntityManagerImpl<>(databaseWrapper, objectMapper, searchFieldGenerator, classInfo);
     }
 }
