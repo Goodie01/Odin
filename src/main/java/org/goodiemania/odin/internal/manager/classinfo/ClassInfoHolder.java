@@ -75,9 +75,8 @@ public class ClassInfoHolder {
 
         if (foundIdFields.size() != 1) {
             throw new EntityException(
-                    String.format(
-                            "Require exactly one, and only one, field annotated with @Id, on class: %s",
-                            classInformation.getCanonicalName()));
+                    classInformation,
+                    "Require exactly one, and only one, field annotated with @Id, on attached class");
         }
 
         return foundIdFields.get(0);

@@ -8,7 +8,7 @@ public class UnknownClassException extends OdinException {
         this.entityClass = entityClass;
     }
 
-    public Class<? extends Object> getEntityClass() {
-        return entityClass;
+    public Class<Object> getEntityClass() {
+        return (Class<Object>) entityClass;
     }
 }
