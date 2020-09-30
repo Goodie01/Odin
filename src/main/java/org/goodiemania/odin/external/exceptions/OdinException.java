@@ -1,6 +1,6 @@
 package org.goodiemania.odin.external.exceptions;
 
-public class OdinException extends RuntimeException{
+public class OdinException extends RuntimeException {
     public OdinException() {
         super();
     }

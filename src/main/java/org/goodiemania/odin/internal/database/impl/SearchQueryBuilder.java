@@ -1,4 +1,4 @@
-package org.goodiemania.odin.internal.database.sqlite;
+package org.goodiemania.odin.internal.database.impl;
 
 import java.util.List;
 import org.goodiemania.odin.external.model.SearchTerm;

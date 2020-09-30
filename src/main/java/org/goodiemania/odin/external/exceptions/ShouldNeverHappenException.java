@@ -1,6 +1,6 @@
 package org.goodiemania.odin.external.exceptions;
 
-public class ShouldNeverHappenException extends OdinException{
+public class ShouldNeverHappenException extends OdinException {
     public ShouldNeverHappenException() {
         super();
     }

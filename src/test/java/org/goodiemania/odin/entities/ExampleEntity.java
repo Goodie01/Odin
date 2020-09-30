@@ -1,4 +1,4 @@
-package org.goodiemania.odin.example;
+package org.goodiemania.odin.entities;
 
 import java.util.HashMap;
 import java.util.Map;

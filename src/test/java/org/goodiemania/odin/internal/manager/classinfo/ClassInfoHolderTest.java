@@ -1,9 +1,8 @@
 package org.goodiemania.odin.internal.manager.classinfo;
 
 import java.util.Optional;
-import java.util.Set;
-import org.goodiemania.odin.example.ExampleEntity;
-import org.goodiemania.odin.example.NotPartOfHolderEntity;
+import org.goodiemania.odin.entities.ExampleEntity;
+import org.goodiemania.odin.entities.NotPartOfHolderEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,21 +12,40 @@ class ClassInfoHolderTest {
 
     @BeforeEach
     void setUp() {
-        final ClassInfoBuilder classInfoBuilder = new ClassInfoBuilder();
-
-        final Set<ClassInfo<?>> classInfoSet = Set.of(classInfoBuilder.build(ExampleEntity.class));
-        classInfoHolder = new ClassInfoHolder(classInfoSet);
+        classInfoHolder = new ClassInfoHolder();
+        classInfoHolder.add(ExampleEntity.class);
     }
 
     @Test
     void happyFlow() {
-        final Optional<ClassInfo<ExampleEntity>> exampleEntityClassInfo = classInfoHolder.find(ExampleEntity.class);
+        final Optional<ClassInfo<ExampleEntity>> exampleEntityClassInfo = classInfoHolder.retrieve(ExampleEntity.class);
         Assertions.assertTrue(exampleEntityClassInfo.isPresent());
     }
 
     @Test
     void ClassIsNotPartOfHolder() {
-        final Optional<ClassInfo<NotPartOfHolderEntity>> exampleEntityClassInfo = classInfoHolder.find(NotPartOfHolderEntity.class);
+        final Optional<ClassInfo<NotPartOfHolderEntity>> exampleEntityClassInfo = classInfoHolder.retrieve(NotPartOfHolderEntity.class);
         Assertions.assertTrue(exampleEntityClassInfo.isEmpty());
+    }
+
+
+    @Test
+    void testTableName() {
+        Assertions.assertEquals("ExampleEntity", get().getTableName());
+    }
+
+    @Test
+    void testSearchTableName() {
+        Assertions.assertEquals("ExampleEntity___SearchTable", get().getSearchTableName());
+    }
+
+    @Test
+    void testIndexSearchField() {
+        Assertions.assertEquals("id", get().getIdField().getName());
+    }
+
+    private ClassInfo<ExampleEntity> get() {
+        classInfoHolder.add(ExampleEntity.class);
+        return classInfoHolder.retrieve(ExampleEntity.class).orElseThrow();
     }
 }

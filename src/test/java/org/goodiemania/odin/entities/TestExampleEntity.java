@@ -1,6 +1,5 @@
-package org.goodiemania.odin.example;
+package org.goodiemania.odin.entities;
 
-import org.checkerframework.checker.interning.qual.InternedDistinct;
 import org.goodiemania.odin.external.annotations.Entity;
 import org.goodiemania.odin.external.annotations.Id;
 

@@ -29,7 +29,7 @@ public class OdinImpl implements Odin {
 
     @Override
     public <T> EntityManager<T> createFor(final Class<T> entityClass) {
-        ClassInfo<T> classInfo = entityClasses.find(entityClass)
+        ClassInfo<T> classInfo = entityClasses.retrieve(entityClass)
                 .orElseThrow(() -> new UnknownClassException(entityClass, "Unable to find given class in any packages"));
 
         return new EntityManagerImpl<T>(databaseWrapper, objectMapper, searchFieldGenerator, classInfo);

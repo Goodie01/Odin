@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.goodiemania.odin.example.ExampleEntity;
+import org.goodiemania.odin.entities.ExampleEntity;
 import org.goodiemania.odin.external.EntityManager;
 import org.goodiemania.odin.external.Odin;
 import org.goodiemania.odin.external.model.SearchTerm;
@@ -22,20 +22,21 @@ public class DataStorageTests {
     private static final String EXAMPLE_ENTITY_NEW_DESCRIPTION = "This is a new Example description!";
     private static final String EXAMPLE_ENTITY_MAP_KEY = "Example";
     private static final String EXAMPLE_ENTITY_MAP_VALUE = "Howdy";
+    private static final String DATABASE_NAME_FOR_RUN = UUID.randomUUID().toString();
     private EntityManager<ExampleEntity> em;
 
     @BeforeEach
     void setUp() {
         Odin odin = Odin.create()
-                .addPackageName("org.goodiemania.odin.example")
-                .setJdbcConnectUrl("jdbc:sqlite:mainDatabase")
+                .addPackageName("org.goodiemania.odin.entities")
+                .setJdbcConnectUrl("jdbc:sqlite:" + DATABASE_NAME_FOR_RUN)
                 .build();
         em = odin.createFor(ExampleEntity.class);
     }
 
     @AfterEach
     void tearDown() {
-        final File databaseFile = new File("mainDatabase");
+        final File databaseFile = new File(DATABASE_NAME_FOR_RUN);
         assertTrue(databaseFile.delete());
     }
 

@@ -1,4 +1,4 @@
-package org.goodiemania.odin.internal.database.sqlite;
+package org.goodiemania.odin.internal.database.impl;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,11 +15,11 @@ import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.statement.Query;
 
-public class SqliteWrapper implements DatabaseWrapper {
+public class DatabaseWrapperImpl implements DatabaseWrapper {
     private final Jdbi jdbi;
     private final SearchQueryBuilder searchQueryBuilder;
 
-    public SqliteWrapper(String jdbcConnectUrl) {
+    public DatabaseWrapperImpl(String jdbcConnectUrl) {
         this.jdbi = Jdbi.create(jdbcConnectUrl);
         searchQueryBuilder = new SearchQueryBuilder();
     }

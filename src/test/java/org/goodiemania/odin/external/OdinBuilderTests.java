@@ -1,8 +1,5 @@
 package org.goodiemania.odin.external;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.goodiemania.odin.example.ExampleEntity;
-import org.goodiemania.odin.external.exceptions.EntityException;
 import org.goodiemania.odin.external.exceptions.InvalidArgumentsException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,7 +19,7 @@ public class OdinBuilderTests {
     void noJdbcUrlProvided() {
         final InvalidArgumentsException exception = Assertions.assertThrows(InvalidArgumentsException.class, () ->
                 Odin.create()
-                        .addPackageName("org.goodiemania.odin.example")
+                        .addPackageName("org.goodiemania.odin.entities")
                         .build());
         Assertions.assertEquals(exception.getMessage(),
                 "JDBC connection URL must be set");
@@ -30,10 +27,9 @@ public class OdinBuilderTests {
 
     @Test
     void happyFlow() {
-        new ObjectMapper();
         final Odin odinInstance = Odin.create()
-                .setJdbcConnectUrl("jdbc:sqlite:mainDatabase")
-                .addPackageName("org.goodiemania.odin.example")
+                .setJdbcConnectUrl("jdbc:h2:mem:test_mem")
+                .addPackageName("org.goodiemania.odin.entities")
                 .build();
 
         Assertions.assertNotNull(odinInstance);

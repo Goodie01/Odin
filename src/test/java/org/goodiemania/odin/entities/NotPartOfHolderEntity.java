@@ -1,4 +1,4 @@
-package org.goodiemania.odin.example;
+package org.goodiemania.odin.entities;
 
 public class NotPartOfHolderEntity {
 }
