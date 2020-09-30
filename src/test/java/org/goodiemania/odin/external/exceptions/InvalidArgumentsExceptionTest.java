@@ -1,8 +1,7 @@
 package org.goodiemania.odin.external.exceptions;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 class InvalidArgumentsExceptionTest {
@@ -11,7 +10,7 @@ class InvalidArgumentsExceptionTest {
     void creationTest() {
         InvalidArgumentsException entityWritingException = new InvalidArgumentsException("Hello there");
 
-        assertEquals(entityWritingException.getMessage(), "Hello there");
+        assertEquals("Hello there", entityWritingException.getMessage());
     }
 
 }

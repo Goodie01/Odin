@@ -10,6 +10,6 @@ class UnknownClassExceptionTest {
         UnknownClassException unknownClassException = new UnknownClassException(UnknownClassExceptionTest.class, "Hello there");
 
         assertEquals(unknownClassException.getEntityClass(), UnknownClassExceptionTest.class);
-        assertEquals(unknownClassException.getMessage(), "Hello there");
+        assertEquals("Hello there", unknownClassException.getMessage());
     }
 }

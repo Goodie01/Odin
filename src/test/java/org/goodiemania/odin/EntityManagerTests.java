@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class EntityManagerTests {
+class EntityManagerTests {
     private Odin odin;
 
     @BeforeEach
@@ -61,7 +61,7 @@ public class EntityManagerTests {
         Assertions.assertEquals(2, all.size());
     }
 
-    public ExampleEntity get() {
+    private ExampleEntity get() {
         final ExampleEntity exampleEntity = new ExampleEntity();
         exampleEntity.setId(UUID.randomUUID().toString());
         exampleEntity.setName("Generate Kenobi");
