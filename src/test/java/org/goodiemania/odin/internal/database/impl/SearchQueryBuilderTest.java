@@ -29,4 +29,16 @@ class SearchQueryBuilderTest {
                 searchQuery
         );
     }
+
+    @Test
+    void happyFlowWithMultipleTerms() {
+        String searchQuery = searchQueryBuilder.build(exampleEntityClassInfo,
+                List.of(
+                        SearchTerm.of("field", "value"),
+                        SearchTerm.of("rarg", "rarg")));
+        Assertions.assertEquals(
+                "select objectId from ExampleEntity___SearchTable where (fieldName like :fieldName0 and fieldValue like :value0) or (fieldName like :fieldName1 and fieldValue like :value1)",
+                searchQuery
+        );
+    }
 }
