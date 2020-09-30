@@ -20,9 +20,6 @@ import org.goodiemania.odin.external.exceptions.ShouldNeverHappenException;
 public class ClassInfoHolder {
     private final Set<ClassInfo<?>> classInformation = new HashSet<>();
 
-    public ClassInfoHolder() {
-    }
-
     public <T> Optional<ClassInfo<T>> retrieve(final Class<T> entityClass) {
         for (ClassInfo<?> potentialClassInfo : classInformation) {
             if (potentialClassInfo.getRawClass().isAssignableFrom(entityClass)) {
@@ -33,8 +30,10 @@ public class ClassInfoHolder {
         return Optional.empty();
     }
 
-    public Set<ClassInfo<?>> retrieveAll() {
-        return classInformation;
+    public Set<ClassInfo<Object>> retrieveAll() {
+        return classInformation.stream()
+                .map(classInfo -> (ClassInfo<Object>) classInfo)
+                .collect(Collectors.toSet());
     }
 
     public <T> void add(final Class<T> rawClass) {
@@ -99,7 +98,6 @@ public class ClassInfoHolder {
                 .stream()
                 .filter(propertyDescriptor -> {
                     try {
-                        //TODO change to getField, write test to check this
                         return classInformation.getDeclaredField(propertyDescriptor.getName())
                                 .isAnnotationPresent(annotationClass);
                     } catch (NoSuchFieldException e) {

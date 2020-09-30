@@ -4,21 +4,17 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.goodiemania.odin.entities.ExampleEntity;
 import org.goodiemania.odin.internal.database.SearchField;
-import org.goodiemania.odin.internal.manager.classinfo.ClassInfoBuilder;
 import org.goodiemania.odin.internal.manager.classinfo.ClassInfoHolder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class SearchFieldGeneratorTest {
-    private ClassInfoHolder classInfoHolder;
     private SearchFieldGenerator searchFieldGenerator;
-    private ClassInfoBuilder classInfoBuilder;
 
     @BeforeEach
     void setUp() {
-        classInfoBuilder = new ClassInfoBuilder();
-        classInfoHolder = new ClassInfoHolder();
+        final ClassInfoHolder classInfoHolder = new ClassInfoHolder();
         classInfoHolder.add(ExampleEntity.class);
         searchFieldGenerator = new SearchFieldGenerator(classInfoHolder);
     }

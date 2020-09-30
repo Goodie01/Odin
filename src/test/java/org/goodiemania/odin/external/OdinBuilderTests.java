@@ -4,7 +4,7 @@ import org.goodiemania.odin.external.exceptions.InvalidArgumentsException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class OdinBuilderTests {
+class OdinBuilderTests {
     @Test
     void noPackageNamesProvided() {
         final InvalidArgumentsException exception = Assertions.assertThrows(InvalidArgumentsException.class, () ->

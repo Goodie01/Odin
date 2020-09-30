@@ -11,12 +11,6 @@ import org.goodiemania.odin.internal.manager.ClassFinder;
 import org.goodiemania.odin.internal.manager.classinfo.ClassInfoHolder;
 import org.goodiemania.odin.internal.manager.search.SearchFieldGenerator;
 
-/*
-    TODO:
-        Expand search, eg I should be able to search for a blank field
-        write some unit tests
- */
-
 public interface Odin {
     <T> EntityManager<T> createFor(Class<T> entityClass);
 

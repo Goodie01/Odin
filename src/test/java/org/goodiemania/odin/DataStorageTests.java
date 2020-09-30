@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class DataStorageTests {
+class DataStorageTests {
     private static final String EXAMPLE_ENTITY_NAME = "Example Entity";
     private static final String EXAMPLE_ENTITY_DESCRIPTION = "This is a description so YAY";
     private static final String EXAMPLE_ENTITY_NEW_DESCRIPTION = "This is a new Example description!";
@@ -52,10 +52,10 @@ public class DataStorageTests {
         assertTrue(possiblyFoundEntity.isPresent());
 
         ExampleEntity foundEntity = possiblyFoundEntity.get();
-        assertEquals(foundEntity.getId(), id);
-        assertEquals(foundEntity.getName(), EXAMPLE_ENTITY_NAME);
-        assertEquals(foundEntity.getDescription(), EXAMPLE_ENTITY_DESCRIPTION);
-        assertEquals(foundEntity.getMap().get(EXAMPLE_ENTITY_MAP_KEY), EXAMPLE_ENTITY_MAP_VALUE);
+        assertEquals(id, foundEntity.getId());
+        assertEquals(EXAMPLE_ENTITY_NAME, foundEntity.getName());
+        assertEquals(EXAMPLE_ENTITY_DESCRIPTION, foundEntity.getDescription());
+        assertEquals(EXAMPLE_ENTITY_MAP_VALUE, foundEntity.getMap().get(EXAMPLE_ENTITY_MAP_KEY));
     }
 
     @Test
@@ -71,10 +71,10 @@ public class DataStorageTests {
 
         final Optional<ExampleEntity> foundEntity = em.getById(id);
         assertTrue(foundEntity.isPresent());
-        assertEquals(foundEntity.get().getId(), id);
-        assertEquals(foundEntity.get().getName(), EXAMPLE_ENTITY_NAME);
-        assertEquals(foundEntity.get().getDescription(), EXAMPLE_ENTITY_NEW_DESCRIPTION);
-        assertEquals(foundEntity.get().getMap().get(EXAMPLE_ENTITY_MAP_KEY), EXAMPLE_ENTITY_MAP_VALUE);
+        assertEquals(id, foundEntity.get().getId());
+        assertEquals(EXAMPLE_ENTITY_NAME, foundEntity.get().getName());
+        assertEquals(EXAMPLE_ENTITY_NEW_DESCRIPTION, foundEntity.get().getDescription());
+        assertEquals(EXAMPLE_ENTITY_MAP_VALUE, foundEntity.get().getMap().get(EXAMPLE_ENTITY_MAP_KEY));
     }
 
     @Test

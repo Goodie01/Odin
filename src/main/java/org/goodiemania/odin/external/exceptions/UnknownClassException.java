@@ -1,13 +1,9 @@
 package org.goodiemania.odin.external.exceptions;
 
 public class UnknownClassException extends OdinException {
-    private Class<? extends Object> entityClass;
+    private final Class<?> entityClass;
 
-    public UnknownClassException(final String s) {
-        super(s);
-    }
-
-    public UnknownClassException(final Class<? extends Object> entityClass, final String s) {
+    public UnknownClassException(final Class<?> entityClass, final String s) {
         super(s);
         this.entityClass = entityClass;
     }

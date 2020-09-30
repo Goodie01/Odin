@@ -2,7 +2,6 @@ package org.goodiemania.odin.internal.manager.classinfo;
 
 import java.beans.PropertyDescriptor;
 import java.util.List;
-import java.util.Objects;
 
 public class ClassInfo<T> {
     private final Class<T> rawClass;
