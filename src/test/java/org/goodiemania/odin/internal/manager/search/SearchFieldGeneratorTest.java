@@ -30,12 +30,12 @@ class SearchFieldGeneratorTest {
         Assertions.assertEquals(3, generate.size());
         generate.forEach(searchField -> {
             if (StringUtils.equals(searchField.getFieldName(), "id")) {
-                Assertions.assertEquals(searchField.getFieldValue(), "Hello there");
-            } else if (StringUtils.equals(searchField.getFieldName(), "description")) {
-                Assertions.assertEquals(searchField.getFieldValue(), "General Kenobi");
+                Assertions.assertEquals("Hello there", searchField.getFieldValue());
+            } else if (StringUtils.equals("description", searchField.getFieldName())) {
+                Assertions.assertEquals("General Kenobi", searchField.getFieldValue());
             } else {
-                Assertions.assertEquals(searchField.getFieldName(), "name");
-                Assertions.assertEquals(searchField.getFieldValue(), "");
+                Assertions.assertEquals("name", searchField.getFieldName());
+                Assertions.assertEquals("", searchField.getFieldValue());
             }
         });
     }

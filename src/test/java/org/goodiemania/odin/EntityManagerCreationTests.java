@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import org.goodiemania.odin.entities.ExampleEntity;
 import org.goodiemania.odin.entities.NotPartOfHolderEntity;
-import org.goodiemania.odin.entities.TestExampleEntity;
+import org.goodiemania.odin.external.EntityManager;
 import org.goodiemania.odin.external.Odin;
 import org.goodiemania.odin.external.exceptions.UnknownClassException;
 import org.junit.jupiter.api.AfterEach;
@@ -32,12 +32,8 @@ class EntityManagerCreationTests {
 
     @Test
     void createEntityManagerForExistingEntity() {
-        odin.createFor(ExampleEntity.class);
-    }
-
-    @Test
-    void createEntityManagerForExistingTestEntity() {
-        odin.createFor(TestExampleEntity.class);
+        final EntityManager<ExampleEntity> em = odin.createFor(ExampleEntity.class);
+        Assertions.assertNotNull(em);
     }
 
     @Test

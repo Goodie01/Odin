@@ -25,8 +25,8 @@ class SearchQueryBuilderTest {
     void happyFlow() {
         String searchQuery = searchQueryBuilder.build(exampleEntityClassInfo, List.of(SearchTerm.of("field", "value")));
         Assertions.assertEquals(
-                searchQuery,
-                "select objectId from ExampleEntity___SearchTable where (fieldName like :fieldName0 and fieldValue like :value0)"
+                "select objectId from ExampleEntity___SearchTable where (fieldName like :fieldName0 and fieldValue like :value0)",
+                searchQuery
         );
     }
 }

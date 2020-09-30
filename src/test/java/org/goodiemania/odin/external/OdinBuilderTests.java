@@ -7,22 +7,18 @@ import org.junit.jupiter.api.Test;
 class OdinBuilderTests {
     @Test
     void noPackageNamesProvided() {
-        final InvalidArgumentsException exception = Assertions.assertThrows(InvalidArgumentsException.class, () ->
-                Odin.create()
-                        .setJdbcConnectUrl("jdbc:sqlite:mainDatabase")
-                        .build());
-        Assertions.assertEquals(exception.getMessage(),
-                "You must provide at least one package name");
+        final Odin.OdinBuilder odinBuilder = Odin.create().setJdbcConnectUrl("jdbc:sqlite:mainDatabase");
+        final InvalidArgumentsException exception = Assertions.assertThrows(InvalidArgumentsException.class, odinBuilder::build);
+        Assertions.assertEquals("You must provide at least one package name",
+                exception.getMessage());
     }
 
     @Test
     void noJdbcUrlProvided() {
-        final InvalidArgumentsException exception = Assertions.assertThrows(InvalidArgumentsException.class, () ->
-                Odin.create()
-                        .addPackageName("org.goodiemania.odin.entities")
-                        .build());
-        Assertions.assertEquals(exception.getMessage(),
-                "JDBC connection URL must be set");
+        final Odin.OdinBuilder odinBuilder = Odin.create().addPackageName("org.goodiemania.odin.entities");
+        final InvalidArgumentsException exception = Assertions.assertThrows(InvalidArgumentsException.class, odinBuilder::build);
+        Assertions.assertEquals("JDBC connection URL must be set",
+                exception.getMessage());
     }
 
     @Test
