@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.goodiemania.odin.external.exceptions.EntityThrewExceptionException;
 import org.goodiemania.odin.external.exceptions.ShouldNeverHappenException;
 import org.goodiemania.odin.internal.database.SearchField;
 import org.goodiemania.odin.internal.manager.classinfo.ClassInfo;
@@ -37,8 +38,10 @@ public class SearchFieldGenerator {
                         } else {
                             return generateBasicField(fieldObject, propertyDescriptor);
                         }
-                    } catch (IllegalAccessException | InvocationTargetException e) {
+                    } catch (IllegalAccessException e) {
                         throw new ShouldNeverHappenException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new EntityThrewExceptionException(e);
                     }
                 })
                 .collect(Collectors.toList());

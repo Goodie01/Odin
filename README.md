@@ -18,6 +18,12 @@ Odin is often associated with wisdom, healing, royality, the gallows, and knowle
 ````
 For further details see SqLiteExamples under src/test/java/org/goodiemania/odin/SqLiteExamples.java
 
+# Misc
+
+Running mutation tests
+```bash
+mvn org.pitest:pitest-maven:mutationCoverage
+```
 
 # Misc links
 * [Odin Sonar](https://sonarcloud.io/dashboard?id=Goodie01_Odin)
