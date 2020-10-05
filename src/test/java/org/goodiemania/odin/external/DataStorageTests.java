@@ -1,4 +1,4 @@
-package org.goodiemania.odin;
+package org.goodiemania.odin.external;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -56,6 +56,22 @@ class DataStorageTests {
         assertEquals(EXAMPLE_ENTITY_NAME, foundEntity.getName());
         assertEquals(EXAMPLE_ENTITY_DESCRIPTION, foundEntity.getDescription());
         assertEquals(EXAMPLE_ENTITY_MAP_VALUE, foundEntity.getMap().get(EXAMPLE_ENTITY_MAP_KEY));
+    }
+
+    @Test
+    void saveAndDeleteObject() {
+        String id = UUID.randomUUID().toString();
+
+        ExampleEntity exampleEntity = createExampleEntity(id);
+        em.save(exampleEntity);
+
+        Optional<ExampleEntity> possiblyFoundEntity = em.getById(id);
+        assertTrue(possiblyFoundEntity.isPresent());
+
+        em.deleteById(id);
+
+        possiblyFoundEntity = em.getById(id);
+        assertTrue(possiblyFoundEntity.isEmpty());
     }
 
     @Test

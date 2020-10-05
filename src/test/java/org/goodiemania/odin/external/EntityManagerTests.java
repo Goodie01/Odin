@@ -1,14 +1,13 @@
-package org.goodiemania.odin;
+package org.goodiemania.odin.external;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import org.goodiemania.odin.entities.ExampleEntity;
-import org.goodiemania.odin.external.EntityManager;
-import org.goodiemania.odin.external.Odin;
+import org.goodiemania.odin.entities.NotPartOfHolderEntity;
+import org.goodiemania.odin.external.exceptions.UnknownClassException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +34,7 @@ class EntityManagerTests {
     void testGetById() {
         final EntityManager<ExampleEntity> em = odin.createFor(ExampleEntity.class);
 
-        final ExampleEntity exampleEntity = get();
+        final ExampleEntity exampleEntity = createEntity();
         final String id = exampleEntity.getId();
 
         em.save(exampleEntity);
@@ -51,9 +50,9 @@ class EntityManagerTests {
     void testGetAll() {
         final EntityManager<ExampleEntity> em = odin.createFor(ExampleEntity.class);
 
-        final ExampleEntity firstEntity = get();
+        final ExampleEntity firstEntity = createEntity();
         em.save(firstEntity);
-        final ExampleEntity secondEntity = get();
+        final ExampleEntity secondEntity = createEntity();
         em.save(secondEntity);
 
         final List<ExampleEntity> all = em.getAll();
@@ -61,7 +60,7 @@ class EntityManagerTests {
         Assertions.assertEquals(2, all.size());
     }
 
-    private ExampleEntity get() {
+    private ExampleEntity createEntity() {
         final ExampleEntity exampleEntity = new ExampleEntity();
         exampleEntity.setId(UUID.randomUUID().toString());
         exampleEntity.setName("Generate Kenobi");

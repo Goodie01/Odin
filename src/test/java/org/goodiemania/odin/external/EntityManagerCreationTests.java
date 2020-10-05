@@ -1,4 +1,4 @@
-package org.goodiemania.odin;
+package org.goodiemania.odin.external;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -37,11 +37,11 @@ class EntityManagerCreationTests {
     }
 
     @Test
-    void createEntityManagerForNotExistingEntity() {
-        final UnknownClassException unknownClassException = Assertions.assertThrows(UnknownClassException.class, () -> {
-            odin.createFor(NotPartOfHolderEntity.class);
-        });
+    void entityNotRegistered() {
+        UnknownClassException unknownClassException =
+                Assertions.assertThrows(UnknownClassException.class, () -> odin.createFor(NotPartOfHolderEntity.class));
 
-        Assertions.assertEquals(unknownClassException.getEntityClass(), NotPartOfHolderEntity.class);
+        Assertions.assertEquals(NotPartOfHolderEntity.class, unknownClassException.getEntityClass());
+        Assertions.assertEquals("Unable to find given class in any packages", unknownClassException.getMessage());
     }
 }
