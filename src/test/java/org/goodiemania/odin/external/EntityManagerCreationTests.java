@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import org.goodiemania.odin.entities.ExampleEntity;
 import org.goodiemania.odin.entities.NotPartOfHolderEntity;
-import org.goodiemania.odin.external.EntityManager;
-import org.goodiemania.odin.external.Odin;
 import org.goodiemania.odin.external.exceptions.UnknownClassException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;

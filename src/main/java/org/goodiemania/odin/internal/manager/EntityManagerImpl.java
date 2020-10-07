@@ -65,7 +65,7 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
     }
 
     @Override
-    public List<T> search(final List<SearchTerm> searchTerms) {
+    public List<T> search(final SearchTerm searchTerms) {
         return databaseWrapper.search(classInfo, searchTerms)
                 .stream()
                 .map(this::convertJsonStringToObject)

@@ -5,16 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import org.goodiemania.odin.entities.ExampleEntity;
 import org.goodiemania.odin.external.model.SearchTerm;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class DataStorageTests {
+public class EntityManagerSearchTests {
     private static final String EXAMPLE_ENTITY_NAME = "Example Entity";
     private static final String EXAMPLE_ENTITY_DESCRIPTION = "This is a description so YAY";
     private static final String EXAMPLE_ENTITY_NEW_DESCRIPTION = "This is a new Example description!";
@@ -39,56 +37,23 @@ class DataStorageTests {
     }
 
     @Test
-    void saveAndRestoreObject() {
-        String id = UUID.randomUUID().toString();
-
-        ExampleEntity exampleEntity = createExampleEntity(id);
-
+    void searchForItemInDatabase() {
+        final ExampleEntity exampleEntity = createExampleEntity(UUID.randomUUID().toString());
         em.save(exampleEntity);
 
-        Optional<ExampleEntity> possiblyFoundEntity = em.getById(id);
-        assertTrue(possiblyFoundEntity.isPresent());
+        List<ExampleEntity> searchResults = em.search(SearchTerm.equals("%","%YAY"));
 
-        ExampleEntity foundEntity = possiblyFoundEntity.get();
-        assertEquals(id, foundEntity.getId());
-        assertEquals(EXAMPLE_ENTITY_NAME, foundEntity.getName());
-        assertEquals(EXAMPLE_ENTITY_DESCRIPTION, foundEntity.getDescription());
-        assertEquals(EXAMPLE_ENTITY_MAP_VALUE, foundEntity.getMap().get(EXAMPLE_ENTITY_MAP_KEY));
+        assertEquals(1, searchResults.size());
     }
 
     @Test
-    void saveAndDeleteObject() {
-        String id = UUID.randomUUID().toString();
-
-        ExampleEntity exampleEntity = createExampleEntity(id);
+    void searchForItemNotInDatabase() {
+        final ExampleEntity exampleEntity = createExampleEntity(UUID.randomUUID().toString());
         em.save(exampleEntity);
 
-        Optional<ExampleEntity> possiblyFoundEntity = em.getById(id);
-        assertTrue(possiblyFoundEntity.isPresent());
+        List<ExampleEntity> searchResults = em.search(SearchTerm.equals("Description", "%Example%"));
 
-        em.deleteById(id);
-
-        possiblyFoundEntity = em.getById(id);
-        assertTrue(possiblyFoundEntity.isEmpty());
-    }
-
-    @Test
-    void updateExistingObject() {
-        String id = UUID.randomUUID().toString();
-
-        em.save(createExampleEntity(id));
-
-        em.getById(id).ifPresentOrElse(exampleEntity -> {
-            exampleEntity.setDescription(EXAMPLE_ENTITY_NEW_DESCRIPTION);
-            em.save(exampleEntity);
-        }, Assertions::fail);
-
-        final Optional<ExampleEntity> foundEntity = em.getById(id);
-        assertTrue(foundEntity.isPresent());
-        assertEquals(id, foundEntity.get().getId());
-        assertEquals(EXAMPLE_ENTITY_NAME, foundEntity.get().getName());
-        assertEquals(EXAMPLE_ENTITY_NEW_DESCRIPTION, foundEntity.get().getDescription());
-        assertEquals(EXAMPLE_ENTITY_MAP_VALUE, foundEntity.get().getMap().get(EXAMPLE_ENTITY_MAP_KEY));
+        assertEquals(0, searchResults.size());
     }
 
     private ExampleEntity createExampleEntity(final String id) {

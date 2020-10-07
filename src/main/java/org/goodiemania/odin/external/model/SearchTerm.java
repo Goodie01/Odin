@@ -1,23 +1,19 @@
 package org.goodiemania.odin.external.model;
 
-public class SearchTerm {
-    private final String fieldName;
-    private final String fieldValue;
-
-    private SearchTerm(final String fieldName, final String fieldValue) {
-        this.fieldName = fieldName;
-        this.fieldValue = fieldValue;
+public interface SearchTerm {
+    static SearchTerm equals(final String field, final String value) {
+        return new SearchTermImpl(field, value, SearchTermImpl.SearchType.EQUALS);
     }
 
-    public static SearchTerm of(final String fieldName, final String fieldValue) {
-        return new SearchTerm(fieldName, fieldValue);
+    static SearchTerm notEquals(final String field, final String value) {
+        return new SearchTermImpl(field, value, SearchTermImpl.SearchType.NOT_EQUALS);
     }
 
-    public String getFieldName() {
-        return fieldName;
+    static SearchTerm and(final SearchTerm firstTerm, final SearchTerm secondTerm) {
+        return new SearchTermAndOr(firstTerm, secondTerm, SearchTermAndOr.SearchType.AND);
     }
 
-    public String getFieldValue() {
-        return fieldValue;
+    static SearchTerm or(final SearchTerm firstTerm, final SearchTerm secondTerm) {
+        return new SearchTermAndOr(firstTerm, secondTerm, SearchTermAndOr.SearchType.OR);
     }
 }

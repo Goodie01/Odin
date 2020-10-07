@@ -44,7 +44,7 @@ public class SqLiteExamples {
                     System.out.println(byId.getDescription());
                 });
 
-        List<ExampleEntity> searchResults = em.search(List.of(SearchTerm.of("%", "%YAY")));
+        List<ExampleEntity> searchResults = em.search(SearchTerm.equals("%","%YAY"));
 
 
         System.out.println("-------------------------");
@@ -57,7 +57,7 @@ public class SqLiteExamples {
 
         System.out.println("-------------------------");
         System.out.println("Search results for Example:");
-        searchResults = em.search(List.of(SearchTerm.of("%", "%Example%")));
+        searchResults = em.search(SearchTerm.equals("Description", "%Example%"));
 
         searchResults.forEach(searchResult ->
                 System.out.println("Search result: " + searchResult.getName()

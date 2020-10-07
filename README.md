@@ -8,14 +8,18 @@ Odin is designed as a simple easy to use Data access layer for use in quickly cr
 Odin is often associated with wisdom, healing, royality, the gallows, and knowledge. The latter is why this library is named after him.
 
 # Example usage
-````java
-        Odin odin = Odin.create()
-                .addPackageName("org.goodiemania.odin.entities")
-                .setJdbcConnectUrl("jdbc:sqlite:mainDatabase")
-                .build();
-        EntityManager<ExampleEntity> em = odin.createFor(ExampleEntity.class);
-        Optional<ExampleEntity> entity = em.getById("cdf91e4e-030e-11eb-adc1-0242ac120002");
-````
+```java
+    class Main {
+        public static void main(String[] args){
+            Odin odin = Odin.create()
+                    .addPackageName("org.goodiemania.odin.entities")
+                    .setJdbcConnectUrl("jdbc:sqlite:mainDatabase")
+                    .build();
+            EntityManager<ExampleEntity> em = odin.createFor(ExampleEntity.class);
+            Optional<ExampleEntity> entity = em.getById("cdf91e4e-030e-11eb-adc1-0242ac120002");  
+        }
+    }
+```
 For further details see SqLiteExamples under src/test/java/org/goodiemania/odin/SqLiteExamples.java
 
 # Misc
