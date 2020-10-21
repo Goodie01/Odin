@@ -1,4 +1,4 @@
-package org.goodiemania.odin.example;
+package org.goodiemania.odin.entities;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,11 +7,11 @@ import org.goodiemania.odin.external.annotations.Id;
 import org.goodiemania.odin.external.annotations.Index;
 
 @Entity
-@Index
 public class ExampleEntity {
     @Id
     private String id;
     private String name;
+    @Index
     private String description;
     private Map<String, String> map = new HashMap<>();
 

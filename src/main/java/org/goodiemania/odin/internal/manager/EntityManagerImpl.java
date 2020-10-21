@@ -6,12 +6,13 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.goodiemania.odin.external.EntityManager;
 import org.goodiemania.odin.external.exceptions.EntityParseException;
+import org.goodiemania.odin.external.exceptions.EntityWritingException;
+import org.goodiemania.odin.external.exceptions.ShouldNeverHappenException;
 import org.goodiemania.odin.external.model.SearchTerm;
 import org.goodiemania.odin.internal.database.DatabaseWrapper;
 import org.goodiemania.odin.internal.database.SearchField;
@@ -45,24 +46,10 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
             List<SearchField> searchFields = searchFieldGenerator.generate(object);
 
             databaseWrapper.saveEntity(classInfo, id, searchFields, blob);
-        } catch (JsonProcessingException | IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    @Override
-    public void saveWithAdditionalSearchParams(final T object, final Object... additionalObjects) {
-        try {
-            String id = String.valueOf(classInfo.getIdField().getReadMethod().invoke(object));
-            String blob = objectWriter.writeValueAsString(object);
-            List<SearchField> searchFields = Arrays.stream(additionalObjects)
-                    .flatMap(o -> searchFieldGenerator.generate(o).stream())
-                    .collect(Collectors.toList());
-            searchFields.addAll(searchFieldGenerator.generate(object));
-
-            databaseWrapper.saveEntity(classInfo, id, searchFields, blob);
-        } catch (JsonProcessingException | IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalStateException(e);
+        } catch (JsonProcessingException e) {
+            throw new EntityWritingException(e);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new ShouldNeverHappenException(e);
         }
     }
 
@@ -78,7 +65,7 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
     }
 
     @Override
-    public List<T> search(final List<SearchTerm> searchTerms) {
+    public List<T> search(final SearchTerm searchTerms) {
         return databaseWrapper.search(classInfo, searchTerms)
                 .stream()
                 .map(this::convertJsonStringToObject)

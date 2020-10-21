@@ -1,27 +1,21 @@
-package org.goodiemania.odin.internal.database.sqlite;
+package org.goodiemania.odin.internal.database.impl;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import org.goodiemania.odin.external.model.SearchTerm;
 import org.goodiemania.odin.internal.database.DatabaseWrapper;
 import org.goodiemania.odin.internal.database.SearchField;
+import org.goodiemania.odin.internal.database.SearchTermProcessor;
 import org.goodiemania.odin.internal.manager.classinfo.ClassInfo;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.statement.Query;
 
-public class SqliteWrapper implements DatabaseWrapper {
+public class DatabaseWrapperImpl implements DatabaseWrapper {
     private final Jdbi jdbi;
-    private final SearchQueryBuilder searchQueryBuilder;
 
-    public SqliteWrapper(String jdbcConnectUrl) {
+    public DatabaseWrapperImpl(String jdbcConnectUrl) {
         this.jdbi = Jdbi.create(jdbcConnectUrl);
-        searchQueryBuilder = new SearchQueryBuilder();
     }
 
     @Override
@@ -102,42 +96,20 @@ public class SqliteWrapper implements DatabaseWrapper {
                         .findFirst());
     }
 
-    /*
-      Lets talk about this method how it works...
-      * First it queries the database and simply has a list of IDs
-      * It then collates these IDs by occurrences
-      * It sorts these, and converts them to get the backing object,
-            to return said backing object in a list
-      I've separated these steps to make the code more readable.
-      While the steps could all be chained together... there doesn't seem to be much reason to.
-
-      We call list() instead of stream() at the end of the JDBI call
-      to ensure that JDBI can quickly and easily close the connection.
-     */
     @Override
-    public List<String> search(final ClassInfo<?> classInfo, final List<SearchTerm> searchTerms) {
-        List<String> searchResults = jdbi.withHandle(handle -> {
-            Query query = handle.createQuery(searchQueryBuilder.build(classInfo, searchTerms));
-            bindQueryValues(searchTerms, query);
+    public List<String> search(final ClassInfo<?> classInfo, final SearchTerm searchTerms) {
+        final SearchTermProcessor searchTermProcessor = new SearchTermProcessor(classInfo, searchTerms);
+
+        return jdbi.withHandle(handle -> {
+            final Query query = handle.createQuery(searchTermProcessor.getQueryString());
+
+            searchTermProcessor.getParams().forEach(parameterPair -> {
+                query.bind("fieldName" + parameterPair.getCount(), parameterPair.getName());
+                query.bind("value" + parameterPair.getCount(), parameterPair.getValue());
+            });
 
             return query.mapTo(String.class).list();
         });
-
-        Set<Map.Entry<String, Long>> searchResultsCollated = searchResults.stream()
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                .entrySet();
-
-        return searchResultsCollated.stream()
-                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
-                .flatMap(entry -> getById(classInfo, entry.getKey()).stream())
-                .collect(Collectors.toList());
-    }
-
-    private void bindQueryValues(final List<SearchTerm> searchTerms, final Query query) {
-        for (int i = 0; i < searchTerms.size(); i++) {
-            query.bind("fieldName" + i, searchTerms.get(i).getFieldName());
-            query.bind("value" + i, searchTerms.get(i).getFieldValue());
-        }
     }
 
     @Override

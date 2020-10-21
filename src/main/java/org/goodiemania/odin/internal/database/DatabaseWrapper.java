@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.goodiemania.odin.external.model.SearchTerm;
 import org.goodiemania.odin.internal.manager.classinfo.ClassInfo;
 
-//TODO this is a bad name
 public interface DatabaseWrapper {
     void createEntityTable(final ClassInfo<?> classInfo);
 
@@ -21,7 +20,7 @@ public interface DatabaseWrapper {
 
     Optional<String> getById(final ClassInfo<?> classInfo, final String id);
 
-    List<String> search(final ClassInfo<?> classInfo, final List<SearchTerm> searchTerms);
+    List<String> search(final ClassInfo<?> classInfo, final SearchTerm searchTerms);
 
     List<String> getAll(final ClassInfo<?> classInfo);
 }

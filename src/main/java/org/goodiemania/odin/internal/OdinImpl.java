@@ -3,6 +3,7 @@ package org.goodiemania.odin.internal;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.goodiemania.odin.external.EntityManager;
 import org.goodiemania.odin.external.Odin;
+import org.goodiemania.odin.external.exceptions.UnknownClassException;
 import org.goodiemania.odin.internal.database.DatabaseWrapper;
 import org.goodiemania.odin.internal.manager.EntityManagerImpl;
 import org.goodiemania.odin.internal.manager.classinfo.ClassInfo;
@@ -28,9 +29,9 @@ public class OdinImpl implements Odin {
 
     @Override
     public <T> EntityManager<T> createFor(final Class<T> entityClass) {
-        ClassInfo<T> classInfo = entityClasses.find(entityClass)
-                .orElseThrow(() -> new IllegalStateException("Unable to find given class in any packages"));
+        ClassInfo<T> classInfo = entityClasses.retrieve(entityClass)
+                .orElseThrow(() -> new UnknownClassException(entityClass, "Unable to find given class in any packages"));
 
-        return new EntityManagerImpl<T>(databaseWrapper, objectMapper, searchFieldGenerator, classInfo);
+        return new EntityManagerImpl<>(databaseWrapper, objectMapper, searchFieldGenerator, classInfo);
     }
 }
