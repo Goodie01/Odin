@@ -7,6 +7,8 @@ Odin is designed as a simple easy to use Data access layer for use in quickly cr
 
 Odin is often associated with wisdom, healing, royality, the gallows, and knowledge. The latter is why this library is named after him.
 
+## Odin Version 1.X should be considered beta with a API subject to change at a whim
+
 # Example usage
 ```java
     class Main {
@@ -21,6 +23,9 @@ Odin is often associated with wisdom, healing, royality, the gallows, and knowle
     }
 ```
 For further details see SqLiteExamples under src/test/java/org/goodiemania/odin/SqLiteExamples.java
+
+# Requirements
+All objects should be well-formed java beans, with getters and setters as you expect. There should be a no args constructor available. Variables should not be final. Basically we support everything Jackson does natively. 
 
 # Misc
 
