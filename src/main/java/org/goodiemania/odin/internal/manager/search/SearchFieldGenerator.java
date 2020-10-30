@@ -75,11 +75,17 @@ public class SearchFieldGenerator {
 
         return map.entrySet()
                 .stream()
-                .map(entry -> {
+                .flatMap(entry -> {
                     final String mapFieldName = String.format("%s_%s", fieldName, entry.getKey().toString());
-                    final String mapFieldValue = entry.getValue().toString();
-
-                    return new SearchField(mapFieldName, mapFieldValue);
+                    final Object value = entry.getValue();
+                    if (value instanceof Collection) {
+                        return ((Collection<?>) value).stream()
+                                .map(Object::toString)
+                                .map(listMapValue -> new SearchField(mapFieldName, listMapValue));
+                    } else {
+                        final String mapFieldValue = value.toString();
+                        return Stream.of(new SearchField(mapFieldName, mapFieldValue));
+                    }
                 });
     }
 }
