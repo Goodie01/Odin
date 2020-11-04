@@ -35,7 +35,7 @@ public class DatabaseWrapperImpl implements DatabaseWrapper {
                             "CREATE TABLE IF NOT EXISTS %s ("
                                     + "objectId varchar(255), "
                                     + "fieldName varchar(255), "
-                                    + "fieldValue varchar(255))",
+                                    + "fieldValue TEXT)",
                             classInfo.getSearchTableName()));
             if (execute != 0) {
                 handle.execute(String.format("CREATE INDEX objectId ON %s(objectId);", classInfo.getSearchTableName()));
