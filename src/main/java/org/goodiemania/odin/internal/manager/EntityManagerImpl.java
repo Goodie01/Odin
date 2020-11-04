@@ -89,8 +89,10 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
     }
 
     private String processJsonBlob(final String jsonBlob) {
+        //This is probably a H2 database then...
         if (jsonBlob.charAt(0) == '"' && jsonBlob.charAt(jsonBlob.length() - 1) == '"') {
-            return jsonBlob.substring(1, jsonBlob.length() - 1);
+            String substring = jsonBlob.substring(1, jsonBlob.length() - 1);
+            return substring.replace("\\\"","\"");
         }
         return jsonBlob;
     }
