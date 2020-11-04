@@ -82,9 +82,16 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
 
     private T convertJsonStringToObject(final String jsonBlob) {
         try {
-            return objectReader.readValue(jsonBlob);
+            return objectReader.readValue(processJsonBlob(jsonBlob));
         } catch (IOException e) {
             throw new EntityParseException(e);
         }
+    }
+
+    private String processJsonBlob(final String jsonBlob) {
+        if (jsonBlob.charAt(0) == '"' && jsonBlob.charAt(jsonBlob.length() - 1) == '"') {
+            return jsonBlob.substring(1, jsonBlob.length() - 1);
+        }
+        return jsonBlob;
     }
 }
