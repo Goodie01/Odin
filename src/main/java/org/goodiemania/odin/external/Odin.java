@@ -1,6 +1,10 @@
 package org.goodiemania.odin.external;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.util.ArrayList;
 import java.util.List;
 import org.goodiemania.odin.external.exceptions.InvalidArgumentsException;
@@ -56,7 +60,12 @@ public interface Odin {
             }
 
             if (objectMapper == null) {
-                objectMapper = new ObjectMapper();
+                objectMapper = JsonMapper.builder()
+                        .addModule(new JavaTimeModule())
+                        .addModule(new Jdk8Module())
+                        .configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, false)
+                        .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+                        .build();
             }
 
             final DatabaseWrapper databaseWrapper = new DatabaseWrapperImpl(jdbcConnectUrl);
