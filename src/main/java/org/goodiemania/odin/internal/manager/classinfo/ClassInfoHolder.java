@@ -99,6 +99,8 @@ public class ClassInfoHolder {
                     try {
                         return classInformation.getDeclaredField(propertyDescriptor.getName())
                                 .isAnnotationPresent(annotationClass);
+                        //TODO this happens if you have a class where the external interface doesn't match the internal fields
+                        // eg getHomeBase() { return home; }
                     } catch (NoSuchFieldException e) {
                         throw new ShouldNeverHappenException(e);
                     }
