@@ -127,7 +127,10 @@ public class DatabaseWrapperImpl implements DatabaseWrapper {
                             String.format("delete from %s where id = :id", classInfo.getTableName()))
                             .bind("id", id)
                             .execute();
-                    deleteSearchTableEntries(classInfo, id, handle);
+
+                    if (!classInfo.getIndexedFields().isEmpty()) {
+                        deleteSearchTableEntries(classInfo, id, handle);
+                    }
                 }
         );
     }
