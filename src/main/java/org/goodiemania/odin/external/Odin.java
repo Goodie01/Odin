@@ -22,6 +22,8 @@ public interface Odin {
         return new OdinImpl.OdinBuilder();
     }
 
+    Boolean checkConnection();
+
     class OdinBuilder {
         private List<String> packageNames = new ArrayList<>();
         private ObjectMapper objectMapper;

@@ -8,6 +8,8 @@ import org.goodiemania.odin.internal.manager.classinfo.ClassInfo;
 public interface DatabaseWrapper {
     void createEntityTable(final ClassInfo<?> classInfo);
 
+    Boolean checkConnection();
+
     void createEntitySearchFieldTable(final ClassInfo<?> classInfo);
 
     void saveEntity(

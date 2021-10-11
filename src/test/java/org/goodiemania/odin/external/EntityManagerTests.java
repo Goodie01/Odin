@@ -1,5 +1,6 @@
 package org.goodiemania.odin.external;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -28,6 +29,11 @@ class EntityManagerTests {
     void tearDown() {
         final File databaseFile = new File("mainDatabase");
         assertTrue(databaseFile.delete());
+    }
+
+    @Test
+    void testConnection() {
+        assertTrue(odin.checkConnection());
     }
 
     @Test

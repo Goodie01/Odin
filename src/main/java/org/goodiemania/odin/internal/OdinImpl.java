@@ -34,4 +34,9 @@ public class OdinImpl implements Odin {
 
         return new EntityManagerImpl<>(databaseWrapper, objectMapper, searchFieldGenerator, classInfo);
     }
+
+    @Override
+    public Boolean checkConnection() {
+        return databaseWrapper.checkConnection();
+    }
 }

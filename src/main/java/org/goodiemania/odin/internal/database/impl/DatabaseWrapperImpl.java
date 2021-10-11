@@ -28,6 +28,16 @@ public class DatabaseWrapperImpl implements DatabaseWrapper {
     }
 
     @Override
+    public Boolean checkConnection() {
+        return jdbi.withHandle(handle ->
+                handle.createQuery("select 1")
+                        .mapTo(String.class)
+                        .findFirst())
+                .map(s -> true)
+                .orElse(false);
+    }
+
+    @Override
     public void createEntitySearchFieldTable(final ClassInfo<?> classInfo) {
         jdbi.useHandle(handle -> {
             int execute = handle.execute(
