@@ -6,6 +6,7 @@ module org.goodiemania.odin {
 
     //for tests
     exports org.goodiemania.odin.entities;
+    opens org.goodiemania.odin.entities;
 
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.datatype.jdk8;

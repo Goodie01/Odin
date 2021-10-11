@@ -6,7 +6,7 @@ import org.goodiemania.odin.external.annotations.Id;
 import org.goodiemania.odin.external.annotations.Index;
 
 @Entity
-public record ExampleRecordEntity(@Id String id,
+public record ExampleRecordEntity(@Id ExampleId id,
                                   String name,
                                   @Index String description,
                                   Map<String, String> map) {

@@ -4,10 +4,9 @@ import java.io.File;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import org.goodiemania.odin.entities.ExampleEntity;
+import org.goodiemania.odin.entities.ExampleId;
 import org.goodiemania.odin.entities.ExampleRecordEntity;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +38,7 @@ class DataStorageTestsRecords {
 
     @Test
     void saveAndRestoreRecord() {
-        String id = UUID.randomUUID().toString();
+        ExampleId id = new ExampleId(UUID.randomUUID().toString());
 
         ExampleRecordEntity exampleEntity = createExampleRecordEntity(id);
 
@@ -55,7 +54,7 @@ class DataStorageTestsRecords {
         assertEquals(EXAMPLE_ENTITY_MAP_VALUE, foundEntity.map().get(EXAMPLE_ENTITY_MAP_KEY));
     }
 
-    private ExampleRecordEntity createExampleRecordEntity(final String id) {
+    private ExampleRecordEntity createExampleRecordEntity(final ExampleId id) {
         return new ExampleRecordEntity(id,
                 EXAMPLE_ENTITY_NAME,
                 EXAMPLE_ENTITY_DESCRIPTION,

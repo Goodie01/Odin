@@ -71,6 +71,11 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
     }
 
     @Override
+    public Optional<T> getById(final Object id) {
+        return getById(id.toString());
+    }
+
+    @Override
     public void deleteById(final String id) {
         databaseWrapper.deleteById(classInfo, id);
     }
