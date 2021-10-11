@@ -1,6 +1,7 @@
 package org.goodiemania.odin.internal.manager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -22,6 +23,7 @@ import org.goodiemania.odin.internal.manager.search.SearchFieldGenerator;
 public class EntityManagerImpl<T> implements EntityManager<T> {
     private final ObjectWriter objectWriter;
     private final ObjectReader objectReader;
+    private final ObjectReader objectListReader;
     private final ClassInfo<T> classInfo;
     private final DatabaseWrapper databaseWrapper;
     private final SearchFieldGenerator searchFieldGenerator;
@@ -34,8 +36,10 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
         this.classInfo = classInfo;
         this.databaseWrapper = databaseWrapper;
         this.searchFieldGenerator = searchFieldGenerator;
-        this.objectReader = objectMapper.readerFor(classInfo.getRawClass());
         this.objectWriter = objectMapper.writerFor(classInfo.getRawClass());
+        this.objectReader = objectMapper.readerFor(classInfo.getRawClass());
+        this.objectListReader = objectMapper.readerFor(new TypeReference<List<T>>() {
+        });
     }
 
     @Override
@@ -56,7 +60,14 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
     @Override
     public Optional<T> getById(final String id) {
         return databaseWrapper.getById(classInfo, id)
-                .map(this::convertJsonStringToObject);
+                .map(this::proProcessJsonBlob)
+                .map(jsonBlob -> {
+                    try {
+                        return objectReader.readValue(jsonBlob);
+                    } catch (IOException e) {
+                        throw new EntityParseException(e);
+                    }
+                });
     }
 
     @Override
@@ -66,33 +77,31 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
 
     @Override
     public List<T> search(final SearchTerm searchTerms) {
-        return databaseWrapper.search(classInfo, searchTerms)
-                .stream()
-                .map(this::convertJsonStringToObject)
-                .collect(Collectors.toList());
+        return processList(databaseWrapper.search(classInfo, searchTerms));
     }
 
     @Override
     public List<T> getAll() {
-        return databaseWrapper.getAll(classInfo)
-                .stream()
-                .map(this::convertJsonStringToObject)
-                .collect(Collectors.toList());
+        return processList(databaseWrapper.getAll(classInfo));
     }
 
-    private T convertJsonStringToObject(final String jsonBlob) {
+    private List<T> processList(List<String> listOfObjects) {
+        String joinedString = listOfObjects.stream()
+                .map(this::proProcessJsonBlob)
+                .collect(Collectors.joining(","));
+
         try {
-            return objectReader.readValue(processJsonBlob(jsonBlob));
+            return objectListReader.readValue("[%s]".formatted(joinedString));
         } catch (IOException e) {
             throw new EntityParseException(e);
         }
     }
 
-    private String processJsonBlob(final String jsonBlob) {
-        //This is probably a H2 database then...
+    private String proProcessJsonBlob(final String jsonBlob) {
+        //If this is probably a H2 database then...
         if (jsonBlob.charAt(0) == '"' && jsonBlob.charAt(jsonBlob.length() - 1) == '"') {
             String substring = jsonBlob.substring(1, jsonBlob.length() - 1);
-            return substring.replace("\\\"","\"");
+            return substring.replace("\\\"", "\"");
         }
         return jsonBlob;
     }
