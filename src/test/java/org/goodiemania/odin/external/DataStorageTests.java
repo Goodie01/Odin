@@ -1,18 +1,16 @@
 package org.goodiemania.odin.external;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.File;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.goodiemania.odin.entities.ExampleEntity;
-import org.goodiemania.odin.external.model.SearchTerm;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DataStorageTests {
     private static final String EXAMPLE_ENTITY_NAME = "Example Entity";

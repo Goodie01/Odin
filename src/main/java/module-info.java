@@ -13,7 +13,7 @@ module org.goodiemania.odin {
     requires org.apache.commons.lang3;
     requires org.jdbi.v3.core;
     requires java.desktop;
-    requires reflections;
+    requires org.reflections;
 
     opens org.goodiemania.odin.external;
     opens org.goodiemania.odin.external.annotations;

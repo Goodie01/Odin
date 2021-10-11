@@ -41,7 +41,7 @@ public class EntityManagerImpl<T> implements EntityManager<T> {
     @Override
     public void save(final T object) {
         try {
-            String id = String.valueOf(classInfo.getIdField().getReadMethod().invoke(object));
+            String id = String.valueOf(classInfo.getIdField().readMethod().invoke(object));
             String blob = objectWriter.writeValueAsString(object);
             List<SearchField> searchFields = searchFieldGenerator.generate(object);
 

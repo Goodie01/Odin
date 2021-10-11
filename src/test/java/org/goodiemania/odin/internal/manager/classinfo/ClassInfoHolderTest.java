@@ -41,7 +41,7 @@ class ClassInfoHolderTest {
 
     @Test
     void testIndexSearchField() {
-        Assertions.assertEquals("id", get().getIdField().getName());
+        Assertions.assertEquals("id", get().getIdField().name());
     }
 
     private ClassInfo<ExampleEntity> get() {

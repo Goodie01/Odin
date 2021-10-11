@@ -7,15 +7,15 @@ public class ClassInfo<T> {
     private final Class<T> rawClass;
     private final String tableName;
     private final String searchTableName;
-    private final PropertyDescriptor idField;
-    private final List<PropertyDescriptor> indexedFields;
+    private final ClassPropertyInfo idField;
+    private final List<ClassPropertyInfo> indexedFields;
 
     public ClassInfo(
             final Class<T> rawClass,
             final String tableName,
             final String searchTableName,
-            final PropertyDescriptor idField,
-            final List<PropertyDescriptor> indexedFields) {
+            final ClassPropertyInfo idField,
+            final List<ClassPropertyInfo> indexedFields) {
         this.rawClass = rawClass;
         this.tableName = tableName;
         this.searchTableName = searchTableName;
@@ -27,11 +27,11 @@ public class ClassInfo<T> {
         return rawClass;
     }
 
-    public PropertyDescriptor getIdField() {
+    public ClassPropertyInfo getIdField() {
         return idField;
     }
 
-    public List<PropertyDescriptor> getIndexedFields() {
+    public List<ClassPropertyInfo> getIndexedFields() {
         return indexedFields;
     }
 

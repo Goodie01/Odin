@@ -12,6 +12,7 @@ import org.goodiemania.odin.external.exceptions.ShouldNeverHappenException;
 import org.goodiemania.odin.internal.database.SearchField;
 import org.goodiemania.odin.internal.manager.classinfo.ClassInfo;
 import org.goodiemania.odin.internal.manager.classinfo.ClassInfoHolder;
+import org.goodiemania.odin.internal.manager.classinfo.ClassPropertyInfo;
 
 public class SearchFieldGenerator {
     private final ClassInfoHolder classInfoHolder;
@@ -28,7 +29,7 @@ public class SearchFieldGenerator {
                 .stream()
                 .flatMap(propertyDescriptor -> {
                     try {
-                        Object fieldObject = propertyDescriptor.getReadMethod().invoke(object);
+                        Object fieldObject = propertyDescriptor.readMethod().invoke(object);
                         if (fieldObject == null) {
                             return generateNullField(propertyDescriptor);
                         } else if (fieldObject instanceof Map) {
@@ -47,22 +48,22 @@ public class SearchFieldGenerator {
                 .collect(Collectors.toList());
     }
 
-    private Stream<SearchField> generateNullField(final PropertyDescriptor propertyDescriptor) {
-        return Stream.of(new SearchField(propertyDescriptor.getName(), ""));
+    private Stream<SearchField> generateNullField(final ClassPropertyInfo propertyDescriptor) {
+        return Stream.of(new SearchField(propertyDescriptor.name(), ""));
     }
 
     private Stream<SearchField> generateBasicField(
             final Object object,
-            final PropertyDescriptor propertyDescriptor) {
-        String fieldName = propertyDescriptor.getName();
+            final ClassPropertyInfo propertyDescriptor) {
+        String fieldName = propertyDescriptor.name();
         String fieldValue = object.toString();
         return Stream.of(new SearchField(fieldName, fieldValue));
     }
 
     private Stream<SearchField> generateCollectionField(
             final Collection<?> list,
-            final PropertyDescriptor propertyDescriptor) {
-        final String fieldName = propertyDescriptor.getName();
+            final ClassPropertyInfo propertyDescriptor) {
+        final String fieldName = propertyDescriptor.name();
 
         return list.stream()
                 .map(o -> new SearchField(fieldName, o.toString()));
@@ -70,8 +71,8 @@ public class SearchFieldGenerator {
 
     private Stream<SearchField> generateMapField(
             final Map<?, ?> map,
-            final PropertyDescriptor propertyDescriptor) {
-        final String fieldName = propertyDescriptor.getName();
+            final ClassPropertyInfo propertyDescriptor) {
+        final String fieldName = propertyDescriptor.name();
 
         return map.entrySet()
                 .stream()

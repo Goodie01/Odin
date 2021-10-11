@@ -1,6 +1,5 @@
 package org.goodiemania.odin.internal.manager.classinfo;
 
-import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -50,28 +49,37 @@ public class ClassInfoHolder {
         String tableName = rawClass.getSimpleName();
         String searchTableName = tableName + "___SearchTable";
 
-        BeanInfo beanInfo = Introspector.getBeanInfo(rawClass);
-        PropertyDescriptor idField = findIdField(rawClass, beanInfo);
-        List<PropertyDescriptor> indexedFields = findIndexFields(rawClass, beanInfo);
+        List<ClassPropertyInfo> classPropertyInfos;
+        if (rawClass.isRecord()) {
+            classPropertyInfos = Arrays.stream(rawClass.getRecordComponents())
+                    .map(recordComponent -> new ClassPropertyInfo(
+                            recordComponent.getName(),
+                            recordComponent.getAccessor(),
+                            recordComponent.getDeclaredAnnotation(Id.class) != null,
+                            recordComponent.getDeclaredAnnotation(Index.class) != null))
+                    .toList();
+        } else {
+            classPropertyInfos = Arrays.stream(Introspector.getBeanInfo(rawClass).getPropertyDescriptors())
+                    .map(propertyDescriptor -> new ClassPropertyInfo(
+                            propertyDescriptor.getName(),
+                            propertyDescriptor.getReadMethod(),
+                            isAnnotationPresent(rawClass, propertyDescriptor, Id.class),
+                            isAnnotationPresent(rawClass, propertyDescriptor, Index.class)
+                    ))
+                    .toList();
+        }
+        ClassPropertyInfo idField = findIdField(rawClass, classPropertyInfos);
+        List<ClassPropertyInfo> indexedFields = findIndexFields(classPropertyInfos);
 
         return new ClassInfo<>(rawClass, tableName, searchTableName, idField, indexedFields);
     }
 
-    private <T> List<PropertyDescriptor> findIndexFields(final Class<T> rawClass, final BeanInfo beanInfo) {
-        List<PropertyDescriptor> indexedFields;
-        if (rawClass.isAnnotationPresent(Index.class)) {
-            indexedFields = findAllFields(beanInfo);
-        } else {
-            indexedFields = findFieldsWithAnnotation(beanInfo, rawClass, Index.class);
-        }
-        return indexedFields;
+    private List<ClassPropertyInfo> findIndexFields(final List<ClassPropertyInfo> classPropertyInfos) {
+        return classPropertyInfos.stream().filter(ClassPropertyInfo::isIndexField).toList();
     }
 
-
-    private static PropertyDescriptor findIdField(
-            final Class<?> classInformation,
-            final BeanInfo beanInfo) {
-        List<PropertyDescriptor> foundIdFields = findFieldsWithAnnotation(beanInfo, classInformation, Id.class);
+    private ClassPropertyInfo findIdField(final Class<?> classInformation, final List<ClassPropertyInfo> classProperties) {
+        List<ClassPropertyInfo> foundIdFields = classProperties.stream().filter(ClassPropertyInfo::isIdField).toList();
 
         if (foundIdFields.size() != 1) {
             throw new EntityException(
@@ -82,27 +90,17 @@ public class ClassInfoHolder {
         return foundIdFields.get(0);
     }
 
-    private static List<PropertyDescriptor> findAllFields(final BeanInfo beanInfo) {
-        return Arrays.stream(beanInfo.getPropertyDescriptors())
-                .filter(propertyDescriptor ->
-                        !StringUtils.equals("class", propertyDescriptor.getName()))
-                .collect(Collectors.toList());
-    }
+    private <T, A extends Annotation> boolean isAnnotationPresent(final Class<T> rawClass,
+            PropertyDescriptor propertyDescriptor,
+            final Class<A> idClass) {
+        if (StringUtils.equals(propertyDescriptor.getName(), "class")) {
+            return false;
+        }
 
-    private static List<PropertyDescriptor> findFieldsWithAnnotation(
-            final BeanInfo beanInfo,
-            final Class<?> classInformation,
-            final Class<? extends Annotation> annotationClass) {
-        return findAllFields(beanInfo)
-                .stream()
-                .filter(propertyDescriptor -> {
-                    try {
-                        return classInformation.getDeclaredField(propertyDescriptor.getName())
-                                .isAnnotationPresent(annotationClass);
-                    } catch (NoSuchFieldException e) {
-                        throw new ShouldNeverHappenException(e);
-                    }
-                })
-                .collect(Collectors.toList());
+        try {
+            return rawClass.getDeclaredField(propertyDescriptor.getName()).isAnnotationPresent(idClass);
+        } catch (NoSuchFieldException e) {
+            throw new ShouldNeverHappenException(e);
+        }
     }
 }
